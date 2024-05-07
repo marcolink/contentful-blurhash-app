@@ -1,20 +1,19 @@
-import { ConfigAppSDK } from '@contentful/app-sdk';
-import { Flex, Form, Heading, Paragraph } from '@contentful/f36-components';
-import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
-import { css } from 'emotion';
-import { useCallback, useEffect, useState } from 'react';
+import {ConfigAppSDK} from '@contentful/app-sdk';
+import {Flex, Form, Heading, Paragraph} from '@contentful/f36-components';
+import {useSDK} from '@contentful/react-apps-toolkit';
+import {css} from 'emotion';
+import {useCallback, useEffect, useState} from 'react';
+import {makeContentType} from "../logic/makeContentType";
 
-export interface AppInstallationParameters {}
+const CONTENT_TYPE_NAME = 'Blurhash Image'
+export const CONTENT_TYPE_ID = 'blurhashImage'
+
+export interface AppInstallationParameters {
+}
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({});
   const sdk = useSDK<ConfigAppSDK>();
-
-  /*
-     To use the cma, inject it as follows.
-     If it is not needed, you can remove the next line.
-  */
-  // const cma = useCMA();
 
   const onConfigure = useCallback(async () => {
     // This method will be called when a user clicks on "Install"
@@ -24,6 +23,26 @@ const ConfigScreen = () => {
     // Get current the state of EditorInterface and other entities
     // related to this app installation
     const currentState = await sdk.app.getCurrentState();
+
+    const params = {contentTypeId: CONTENT_TYPE_ID}
+
+    let exists = false
+
+    try {
+      const existingContentType = await sdk.cma.contentType.get(params);
+      console.log({existingContentType})
+      if (existingContentType) {
+        exists = true;
+      }
+    } catch (e) {
+      console.log("noop")
+    }
+
+    if (!exists) {
+      const newContentType = await sdk.cma.contentType.createWithId(params, makeContentType(CONTENT_TYPE_NAME))
+      await sdk.cma.contentType.publish(params, newContentType)
+      console.log({newContentType})
+    }
 
     return {
       // Parameters to be persisted as the app configuration.
@@ -58,7 +77,7 @@ const ConfigScreen = () => {
   }, [sdk]);
 
   return (
-    <Flex flexDirection="column" className={css({ margin: '80px', maxWidth: '800px' })}>
+    <Flex flexDirection="column" className={css({margin: '80px', maxWidth: '800px'})}>
       <Form>
         <Heading>App Config</Heading>
         <Paragraph>Welcome to your contentful app. This is your config page.</Paragraph>
