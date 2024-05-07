@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Upload
+      uses: contentful/actions-app-deploy@v1
+      if: github.ref == 'refs/heads/main'
+      with:
+        organization-id: ${{ secrets.ORGANIZATION_ID }}
+        app-definition-id: ${{ secrets.APP_DEFINITION_ID }}
+        access-token: ${{ secrets.ACCESS_TOKEN }}
+        folder: dist
