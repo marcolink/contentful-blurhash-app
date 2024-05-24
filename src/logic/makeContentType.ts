@@ -1,4 +1,5 @@
 import {CreateContentTypeProps} from "contentful-management/dist/typings/entities/content-type";
+import {BLURHASH_DEFAULTS} from "../constants";
 
 export const makeContentType = (contentTypeName: string): CreateContentTypeProps => ({
     name: contentTypeName,
@@ -12,7 +13,7 @@ export const makeContentType = (contentTypeName: string): CreateContentTypeProps
             localized: false,
         },
         {
-            id: 'image',
+            id: BLURHASH_DEFAULTS.imageField,
             name: 'Image',
             required: true,
             type: 'Link',
@@ -20,7 +21,7 @@ export const makeContentType = (contentTypeName: string): CreateContentTypeProps
             localized: false,
         },
         {
-            id: 'blurhash',
+            id: BLURHASH_DEFAULTS.blurhashField,
             name: 'Blurhash',
             required: true,
             type: 'Symbol',
