@@ -4,6 +4,7 @@ import {PlainClientAPI} from "contentful-management";
 import {useMemo, useRef} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {useInstanceParameters} from "./useInstanceParameters";
+import {BLURHASH_DEFAULTS} from "../constants";
 
 type InputProps = {
   assetId?: string
@@ -20,8 +21,8 @@ type Props = InputProps & Required<Pick<InputProps, 'width' | 'height' | 'compon
 const defaultProps: Props = {
   width: 320,
   height: 320,
-  componentX: 6,
-  componentY: 6,
+  componentX: BLURHASH_DEFAULTS.componentX,
+  componentY: BLURHASH_DEFAULTS.componentY,
   language: 'en-US'
 }
 

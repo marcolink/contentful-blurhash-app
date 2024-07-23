@@ -4,6 +4,7 @@ import {useSDK} from '@contentful/react-apps-toolkit';
 import {css} from 'emotion';
 import {useCallback, useEffect, useState} from 'react';
 import {makeContentType} from "../logic/makeContentType";
+import {BLURHASH_DEFAULTS} from "../constants";
 
 const CONTENT_TYPE_NAME = 'Blurhash Image'
 export const CONTENT_TYPE_ID = 'blurhashImage'
@@ -42,6 +43,25 @@ const ConfigScreen = () => {
       const newContentType = await sdk.cma.contentType.createWithId(params, makeContentType(CONTENT_TYPE_NAME))
       await sdk.cma.contentType.publish(params, newContentType)
       console.log({newContentType})
+
+      const editorInterface = await sdk.cma.editorInterface.get({
+        contentTypeId: newContentType.sys.id
+      })
+
+      const blurhashFieldControls = {
+        fieldId: BLURHASH_DEFAULTS.blurhashField,
+        widgetId: sdk.ids.app,
+        widgetNamespace: "app",
+        settings: {
+          sourceImageFieldId: BLURHASH_DEFAULTS.imageField,
+          componentX: BLURHASH_DEFAULTS.componentX,
+          componentY: BLURHASH_DEFAULTS.componentY
+        }
+      }
+
+      editorInterface.controls = editorInterface.controls?.filter(control => control.fieldId !== BLURHASH_DEFAULTS.blurhashField) || []
+      editorInterface.controls.push(blurhashFieldControls)
+      await sdk.cma.editorInterface.update({contentTypeId: newContentType.sys.id}, editorInterface)
     }
 
     return {
