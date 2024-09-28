@@ -31,18 +31,16 @@ const ConfigScreen = () => {
 
     try {
       const existingContentType = await sdk.cma.contentType.get(params);
-      console.log({existingContentType})
       if (existingContentType) {
         exists = true;
       }
     } catch (e) {
-      console.log("noop")
+      console.log(e)
     }
 
     if (!exists) {
       const newContentType = await sdk.cma.contentType.createWithId(params, makeContentType(CONTENT_TYPE_NAME))
       await sdk.cma.contentType.publish(params, newContentType)
-      console.log({newContentType})
 
       const editorInterface = await sdk.cma.editorInterface.get({
         contentTypeId: newContentType.sys.id

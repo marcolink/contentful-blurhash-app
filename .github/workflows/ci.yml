@@ -9,11 +9,19 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+
     - name: Install dependencies
       run: npm install
 
     - name: Build
       run: npm run build
+
+    - name: Test
+      run: npm run test
 
     - name: Upload
       uses: contentful/actions-app-deploy@v1
