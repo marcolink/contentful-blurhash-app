@@ -25,7 +25,7 @@
     "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
   },
   "devDependencies": {
-    "@contentful/app-scripts": "1.19.1",
+    "@contentful/app-scripts": "1.27.0",
     "@testing-library/react": "^16.0.1",
     "@types/node": "20.16.10",
     "@types/react": "18.3.1",
